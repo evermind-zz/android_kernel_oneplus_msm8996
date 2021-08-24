@@ -12,6 +12,11 @@ jobs:
     steps:
     - name: "Checkout kernel source"                  # Clone the kernel source.
       uses: actions/checkout@v2
+    - name: "Set variables"
+      id: vars
+      run: |
+        echo "::set-output name=short_sha::$(git rev-parse HEAD | cut -b 1-8 -)"
+        echo "::set-output name=release_name::Oneplus3-kernel"
     - name: "Checkout zipper"                         # (OPTIONAL) Clone the AnyKernel3 template.
       uses: actions/checkout@v2
       with:
@@ -20,21 +25,28 @@ jobs:
     - name: "Android kernel build"                    # Build kernel with lemniskett/android-kernel-actions.
       uses: lemniskett/android-kernel-actions@master
       id: build
+      env:
+        NAME: ${{ steps.vars.outputs.release_name }}
       with:
         arch: arm64                                   # Specify arch
         compiler: gcc/9                               # Specify toolchain to use
         defconfig: lineageos_oneplus3_defconfig       # Specify defconfig to use
         image: Image.gz-dtb   
+    - name: "data variables"
+      id: vars
+      run: |
+        pwd
+        find
 
     - name: Release build
       uses: ncipollo/release-action@v1
       with:
-        artifacts: ${{ steps.build.outputs.outfile }},/github/workspace/zipper/android_kernel_oneplus_msm8996-*.zip,/github/workspace/zipper/android_kernel_oneplus_msm8996-*,/github/workspace/zipper/*.zip
+        artifacts: ${{ steps.build.outputs.outfile }},/github/workspace/zipper/android_kernel_oneplus_msm8996-*.zip,/github/workspace/zipper/android_kernel_oneplus_msm8996-*,/github/workspace/zipper/*.zip,/github/workspace/out/arch/arm64/boot/Image,/github/workspace/out/arch/arm64/boot/dts/qcom/msm8996pro-pmi8996-mtp_15811.dtb,/github/workspace/out/arch/arm64/boot/dts/qcom/msm8996-v3-pmi8996-mtp_15801.dtb,/github/workspace/out/arch/arm64/boot/Image.gz,/github/workspace/out/arch/arm64/boot/Image.gz-dtb
         token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: "things"
       uses: actions/upload-artifact@v2
       with:
         name: outputstuff
-        path: /github/workspace/out
+        path: ${{ steps.build.outputs.outfile }},/github/workspace/zipper/android_kernel_oneplus_msm8996-*.zip,/github/workspace/zipper/android_kernel_oneplus_msm8996-*,/github/workspace/zipper/*.zip,/github/workspace/out/arch/arm64/boot/Image,/github/workspace/out/arch/arm64/boot/dts/qcom/msm8996pro-pmi8996-mtp_15811.dtb,/github/workspace/out/arch/arm64/boot/dts/qcom/msm8996-v3-pmi8996-mtp_15801.dtb,/github/workspace/out/arch/arm64/boot/Image.gz,/github/workspace/out/arch/arm64/boot/Image.gz-dtb
 
