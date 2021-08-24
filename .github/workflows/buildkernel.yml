@@ -2,7 +2,8 @@
 name: "Build oneplus3 kernel"              # Description of the workflow.
 on:
   push:
-    branches: lin-17.1-mse3                             # Branch to build.
+    tags: '*'
+    #branches: lin-17.1-mse3                             # Branch to build.
   workflow_dispatch:                                  # Allow to manually trigger workflow.
 jobs:
   build:
