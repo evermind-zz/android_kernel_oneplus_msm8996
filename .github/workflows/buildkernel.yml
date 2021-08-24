@@ -33,7 +33,7 @@ jobs:
         defconfig: lineageos_oneplus3_defconfig       # Specify defconfig to use
         image: Image.gz-dtb   
     - name: "data variables"
-      id: vars
+      id: dingdong
       run: |
         pwd
         find
