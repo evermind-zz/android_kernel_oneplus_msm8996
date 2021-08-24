@@ -19,6 +19,7 @@ jobs:
         path: zipper                                  # Clone to path "zipper", REQUIRED.
     - name: "Android kernel build"                    # Build kernel with lemniskett/android-kernel-actions.
       uses: lemniskett/android-kernel-actions@master
+      id: build
       with:
         arch: arm64                                   # Specify arch
         compiler: gcc/9                               # Specify toolchain to use
