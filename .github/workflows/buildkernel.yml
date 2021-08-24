@@ -29,5 +29,5 @@ jobs:
     - name: Release build
       uses: ncipollo/release-action@v1
       with:
-        artifacts: ${{ steps.build.outputs.outfile }}
+        artifacts: ${{ steps.build.outputs.outfile }},/github/workspace/zipper/android_kernel_oneplus_msm8996-*.zip,/github/workspace/zipper/android_kernel_oneplus_msm8996-*
         token: ${{ secrets.GITHUB_TOKEN }}
